@@ -56,7 +56,8 @@ app.post('/webhook', async (req, res) => {
 // জেমিনি এআই ফাংশন (নতুন ও আপডেট করা অংশ)
 async function getGeminiResponse(promptText) {
     try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${GEMINI_API_KEY}`;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+
         const response = await axios.post(url, {
             contents: [{ parts: [{ text: promptText }] }]
         });
