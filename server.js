@@ -70,7 +70,7 @@ async function getGeminiResponse(promptText) {
         }
     } catch (error) {
         console.error("Gemini Error:", error.response ? error.response.data : error.message);
-        return "দুঃখিত, এই মুহূর্তে উত্তর দিতে পারছি না।";
+        return "এই মুহূর্তে উত্তর দিতে পারছি না।";
     }
 }
 
