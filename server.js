@@ -6,8 +6,8 @@ const app = express();
 app.use(bodyParser.json());
 
 // আপনার পছন্দমতো একটি সিক্রেট টোকেন দিন (এটি ফেসবুক ডেভেলপার পেজেও দিতে হবে)
-const VERBOSE_TOKEN = "my_secure_token_123";
-const GEMINI_API_KEY = "আপনার_জেমিনি_এপিআই_কি_এখানে_বসাবেন"; 
+const VERBOSE_TOKEN = process.env.VERIFY_TOKEN;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 // ১. ফেসবুক ওয়েবহুক ভেরিফিকেশন (GET Request)
 app.get('/webhook', (req, res) => {
@@ -69,7 +69,7 @@ async function getGeminiResponse(promptText) {
 
 // মেসেঞ্জার সেন্ড এপিআই ফাংশন
 function callSendAPI(senderPsid, responseText) {
-    const PAGE_ACCESS_TOKEN = "আপনার_ফেসবুক_পেইজ_অ্যাক্সেস_টোকেন_এখানে_বসাবেন";
+    const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
     const requestBody = {
         recipient: { id: senderPsid },
         message: { text: responseText }
