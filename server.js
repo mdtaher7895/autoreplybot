@@ -36,16 +36,16 @@ app.post('/webhook', async (req, res) => {
             const webhookEvent = entry.messaging[0];
             const senderPsid = webhookEvent.sender.id;
 
-            // যদি ইউজারের পক্ষ থেকে কোনো টেক্সট মেসেজ আসে
+                        // যদি ইউজারের পক্ষ থেকে কোনো টেক্সট মেসেজ আসে (সাময়িকভাবে অটো-রিপ্লাই বন্ধ)
             if (webhookEvent.message && webhookEvent.message.text) {
                 const userText = webhookEvent.message.text;
+                console.log("Message received but auto-reply is temporarily turned off.");
                 
-                // জেমিনি এআই থেকে উত্তর নিয়ে আসা
-                const aiReply = await getGeminiResponse(userText);
-                
-                // মেসেঞ্জারে উত্তর পাঠিয়ে দেওয়া
-                callSendAPI(senderPsid, aiReply);
+                // অটো-রিপ্লাই পাঠানো বন্ধ রাখা হলো
+                // const aiReply = await getGeminiResponse(userText);
+                // callSendAPI(senderPsid, aiReply);
             }
+
         });
         res.status(200).send('EVENT_RECEIVED');
     } else {
