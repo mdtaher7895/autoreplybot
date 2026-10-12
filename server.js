@@ -53,17 +53,22 @@ app.post('/webhook', async (req, res) => {
     }
 });
 
-// জেমিনি এআই ফাংশন
+// জেমিনি এআই ফাংশন (নতুন ও আপডেট করা অংশ)
 async function getGeminiResponse(promptText) {
     try {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${GEMINI_API_KEY}`;
-
         const response = await axios.post(url, {
             contents: [{ parts: [{ text: promptText }] }]
         });
-        return response.data.candidates[0].content.parts[0].text;
+        
+        // জেমিনির সঠিক রেসপন্স স্ট্রাকচার চেক করে উত্তর রিটার্ন করা
+        if (response.data && response.data.candidates && response.data.candidates[0].content.parts[0].text) {
+            return response.data.candidates[0].content.parts[0].text;
+        } else {
+            return "দুঃখিত, কোনো উত্তর পাওয়া যায়নি।";
+        }
     } catch (error) {
-        console.error("Gemini Error:", error);
+        console.error("Gemini Error:", error.response ? error.response.data : error.message);
         return "দুঃখিত, এই মুহূর্তে উত্তর দিতে পারছি না।";
     }
 }
