@@ -36,15 +36,17 @@ app.post('/webhook', async (req, res) => {
             const webhookEvent = entry.messaging[0];
             const senderPsid = webhookEvent.sender.id;
 
-                        // যদি ইউজারের পক্ষ থেকে কোনো টেক্সট মেসেজ আসে (সাময়িকভাবে অটো-রিপ্লাই বন্ধ)
+            // যদি ইউজারের পক্ষ থেকে কোনো টেক্সট মেসেজ আসে
             if (webhookEvent.message && webhookEvent.message.text) {
                 const userText = webhookEvent.message.text;
-                console.log("Message received but auto-reply is temporarily turned off.");
                 
-                // অটো-রিপ্লাই পাঠানো বন্ধ রাখা হলো
-                // const aiReply = await getGeminiResponse(userText);
-                // callSendAPI(senderPsid, aiReply);
+                // জেমিনি এআই থেকে উত্তর নিয়ে আসা
+                const aiReply = await getGeminiResponse(userText);
+                
+                // মেসেঞ্জারে সঠিক উত্তর পাঠিয়ে দেওয়া
+                callSendAPI(senderPsid, aiReply);
             }
+
 
         });
         res.status(200).send('EVENT_RECEIVED');
@@ -70,8 +72,10 @@ async function getGeminiResponse(promptText) {
         }
     } catch (error) {
         console.error("Gemini Error:", error.response ? error.response.data : error.message);
-        return "এই মুহূর্তে উত্তর দিতে পারছি না।";
+        // ভুল মেসেজ না পাঠিয়ে যান্ত্রিক ত্রুটির ক্ষেত্রে একটি সুন্দর টেকনিক্যাল উত্তর বা ফাঁকা রাখা যেতে পারে
+        return "বর্তমানে সার্ভারে এআই কানেকশনে একটু সমস্যা হচ্ছে, দয়া করে একটু পরে চেষ্টা করুন।";
     }
+
 }
 
 // মেসেঞ্জার সেন্ড এপিআই ফাংশন
